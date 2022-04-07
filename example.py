@@ -13,7 +13,7 @@ def setup_logging(logging_level):
     # TODO
     #   Configura logging para enviar la salida a un archivo
 
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename="example.log")
     logger = logging.getLogger(__name__)
     logger.setLevel(logging_level)
     logger.info("Logger creado")
@@ -33,7 +33,7 @@ def plot(pandas_series, ticker, logger):
 def main():
     """ Muestra como usar teii-finance. """
 
-    logger = setup_logging(logging.WARNING)
+    logger = setup_logging(logging.INFO)
 
     logger.info("Inicio")
 
@@ -45,7 +45,7 @@ def main():
     try:
         tf_client = tf.TimeSeriesFinanceClient(ticker,
                                                my_alpha_vantage_api_key,
-                                               logging_level=logging.WARNING)
+                                               logging_level=logging.INFO)
     # Captura y muestra todas las excepciones
     except Exception as e:
         logger.error(f"{e}", exc_info=False)
