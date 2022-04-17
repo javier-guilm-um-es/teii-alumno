@@ -1,6 +1,6 @@
 """ Ejemplo de uso del paquete teii. """
 
-
+import datetime as dt
 import logging
 import matplotlib.pyplot as plt
 
@@ -50,11 +50,12 @@ def main():
         logger.error(f"{e}", exc_info=False)
     # Usa el cliente
     else:
-        # TODO
-        #   Filtra los datos para mostrar únicamente el año 2021
+        #  Filtrados los datos para mostrar únicamente el año 2021
 
         # Genera una serie de Pandas con precio de cierre semanal
-        pd_series = tf_client.weekly_price()
+        fecha_inicio = dt.date(2021, 1, 1)
+        fecha_fin = dt.date(2021, 12, 31)
+        pd_series = tf_client.weekly_price(fecha_inicio, fecha_fin)
 
         logger.info(pd_series)
 
