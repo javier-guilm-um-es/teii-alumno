@@ -10,8 +10,7 @@ import teii.finance as tf
 def setup_logging(logging_level):
     """ Crea y configura logger. """
 
-    # TODO
-    #   Configura logging para enviar la salida a un archivo
+    # Configurado el logging para enviar la salida a un archivo
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename="example.log")
     logger = logging.getLogger(__name__)
