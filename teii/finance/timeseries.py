@@ -107,10 +107,6 @@ class TimeSeriesFinanceClient(FinanceClient):
 
         series = self._data_frame['aclose']
 
-        # TODO
-        #   Comprueba que from_date <= to_date y genera excepción
-        #   'FinanceClientParamError' en caso de error
-
         # FIXME: type hint error
         if from_date is not None and to_date is not None:   
             try:    
@@ -133,12 +129,14 @@ class TimeSeriesFinanceClient(FinanceClient):
 
         series = self._data_frame['volume']
 
-        # TODO
-        #   Comprueba que from_date <= to_date y genera excepción
-        #   'FinanceClientParamError' en caso de error
+        if from_date is not None and to_date is not None:   
+            try:    
+                assert from_date <= to_date
 
-        # FIXME: type hint error
-        if from_date is not None and to_date is not None:
-            series = series.loc[from_date:to_date]   # type: ignore
+            except Exception as e:
+                raise FinanceClientParamError("Error en los parámetros introducidos") from e
+            # type: ignore
+            else:
+                series = series.loc[from_date:to_date]
 
         return series
