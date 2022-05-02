@@ -98,3 +98,39 @@ def test_weekly_volume_dates(api_key_str,
 
     assert_series_equal(ps, pandas_series_IBM_volumes_filtered)
     pass
+
+def test_weekly_dividend_invalid_dates(api_key_str,
+                                     mocked_requests):
+    with pytest.raises(FinanceClientParamError):
+        TimeSeriesFinanceClient("IBM", api_key_str).yearly_dividends(dt.date(2020, 1, 1), dt.date(2019,1,1))
+    pass
+
+
+def test_weekly_dividend_no_dates(api_key_str,
+                                mocked_requests,
+                                pandas_series_IBM_dividends):
+    fc = TimeSeriesFinanceClient("IBM", api_key_str)
+
+    ps = fc.yearly_dividends()
+
+    assert ps.count() == 24   # 2019-11-01 to 2022-02-11 (1162 business weeks)
+
+    assert ps.count() == pandas_series_IBM_dividends.count()
+
+    assert_series_equal(ps, pandas_series_IBM_dividends)
+    pass
+
+
+def test_weekly_divident_dates(api_key_str,
+                             mocked_requests,
+                             pandas_series_IBM_dividends_filtered):
+    fc = TimeSeriesFinanceClient("IBM", api_key_str)
+
+    ps = fc.yearly_dividends(dt.date(2015,1,1),dt.date(2019,1,1))
+
+    assert ps.count() == 5    # 2019-01-01 to 2021-12-31 (157 business weeks)
+
+    assert ps.count() == pandas_series_IBM_dividends_filtered.count()
+
+    assert_series_equal(ps, pandas_series_IBM_dividends_filtered)
+    pass

@@ -140,3 +140,28 @@ class TimeSeriesFinanceClient(FinanceClient):
                 series = series.loc[from_date:to_date]
 
         return series
+
+    def yearly_dividends(self,
+                        from_year: Optional[dt.date] = None,
+                        to_year: Optional[dt.date] = None) -> pd.Series:
+        """ Return yearle dividend from 'from_date' to 'to_date'. """
+
+        assert self._data_frame is not None
+
+        series = self._data_frame.groupby(pd.Grouper(freq='YS'))['dividend'].sum()
+
+        if from_year is not None and to_year is not None:   
+            try:    
+                assert from_year.year <= to_year.year
+
+            except Exception as e:
+                raise FinanceClientParamError("Error en los parámetros introducidos") from e
+            # type: ignore
+            else:
+                series = series.loc[from_year:to_year]
+
+        
+        series.index = pd.to_datetime(series.index, format = '%Y-%m-%d').strftime('%Y')
+        series.index = pd.to_datetime(series.index)
+
+        return series
