@@ -6,6 +6,7 @@ import pytest
 
 from pandas.testing import assert_series_equal
 
+from teii.finance import FinanceClientInvalidData
 from teii.finance import TimeSeriesFinanceClient
 from teii.finance import FinanceClientInvalidAPIKey
 
@@ -18,6 +19,10 @@ def test_constructor_success(api_key_str,
 def test_constructor_failure_invalid_api_key():
     with pytest.raises(FinanceClientInvalidAPIKey):
         TimeSeriesFinanceClient("IBM")
+
+def test_constructor_invalid_data(api_key_str, mocked_requests):
+    with pytest.raises(FinanceClientInvalidData):
+        TimeSeriesFinanceClient("NODATA", api_key_str)
 
 
 def test_weekly_price_invalid_dates(api_key_str,

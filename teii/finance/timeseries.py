@@ -43,23 +43,32 @@ class TimeSeriesFinanceClient(FinanceClient):
         # TODO
         #   Comprueba que no se produce ningún error y genera excepción
         #   'FinanceClientInvalidData' en caso de error
+        try:
+             # Build Panda's data frame
+            data_frame = pd.DataFrame.from_dict(self._json_data, orient='index', dtype=float)
 
-        # Build Panda's data frame
-        data_frame = pd.DataFrame.from_dict(self._json_data, orient='index', dtype=float)
+            # Rename data fields
+            data_frame = data_frame.rename(columns={key: name_type[0]
+                                                    for key, name_type in self._data_field2name_type.items()})
 
-        # Rename data fields
-        data_frame = data_frame.rename(columns={key: name_type[0]
+            # Set data field types
+            data_frame = data_frame.astype(dtype={name_type[0]: name_type[1]
                                                 for key, name_type in self._data_field2name_type.items()})
 
-        # Set data field types
-        data_frame = data_frame.astype(dtype={name_type[0]: name_type[1]
-                                              for key, name_type in self._data_field2name_type.items()})
+            # Set index type
+            data_frame.index = data_frame.index.astype("datetime64[ns]")
 
-        # Set index type
-        data_frame.index = data_frame.index.astype("datetime64[ns]")
+            # Sort data
+            self._data_frame = data_frame.sort_index(ascending=True)
 
-        # Sort data
-        self._data_frame = data_frame.sort_index(ascending=True)
+        except Exception as e:
+            raise FinanceClientInvalidData("Datos inválidos para la construcción del dataframe") from e
+        else:
+            self._logger.info(f"Data frame construido")
+            
+
+
+       
 
     def _build_base_query_url_params(self) -> str:
         """ Return base query URL parameters.
