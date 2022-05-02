@@ -7,6 +7,7 @@ import pandas as pd
 
 from typing import Optional, Union
 
+from teii.finance import FinanceClientParamError
 from teii.finance import FinanceClientInvalidData
 from teii.finance import FinanceClient
 
@@ -111,9 +112,16 @@ class TimeSeriesFinanceClient(FinanceClient):
         #   'FinanceClientParamError' en caso de error
 
         # FIXME: type hint error
-        if from_date is not None and to_date is not None:
-            series = series.loc[from_date:to_date]   # type: ignore
+        if from_date is not None and to_date is not None:   
+            try:    
+                assert from_date <= to_date
 
+            except Exception as e:
+                raise FinanceClientParamError("Error en los parámetros introducidos") from e
+            # type: ignore
+            else:
+                series = series.loc[from_date:to_date]
+            
         return series
 
     def weekly_volume(self,
