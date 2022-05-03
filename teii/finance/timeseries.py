@@ -37,6 +37,7 @@ class TimeSeriesFinanceClient(FinanceClient):
         super().__init__(ticker, api_key, logging_level)
 
         self._build_data_frame()
+        self._logger.info("Objeto de tipo TimeSeriesFinanceClient creado")
 
     def _build_data_frame(self) -> None:
         """ Build Panda's DataFrame and format data. """
@@ -76,6 +77,7 @@ class TimeSeriesFinanceClient(FinanceClient):
             https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=TICKER&outputsize=full&apikey=API_KEY&data_type=json
         """
 
+        self._logger.info("Obteniendo parámetros para base query URL solicitada.")
         return f"function=TIME_SERIES_WEEKLY_ADJUSTED&symbol={self._ticker}&outputsize=full&apikey={self._api_key}"
 
     @classmethod
@@ -112,7 +114,10 @@ class TimeSeriesFinanceClient(FinanceClient):
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
 
             else:
+                self._logger.info(f"Precio semanal filtrado desde {from_date} hasta {to_date}.")
                 series = series.loc[from_date:to_date]
+        else:
+            self._logger.info("Precios obtenidos de todos los registros semanales.")
 
         return series
 
@@ -132,7 +137,10 @@ class TimeSeriesFinanceClient(FinanceClient):
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
+                self._logger.info(f"Volumen semanal filtrado desde {from_date} hasta {to_date}.")
                 series = series.loc[from_date:to_date]
+        else:
+            self._logger.info("Volúmenes obtenidos de todos los registros semanales.")
 
         return series
 
@@ -152,7 +160,10 @@ class TimeSeriesFinanceClient(FinanceClient):
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
+                self._logger.info(f"Dividendos anuales filtrados desde {from_year} hasta {to_year}.")
                 series = series.loc[from_year:to_year]
+        else:
+            self._logger.info("Dividendos obtenidos de todos los años.")
 
         series.index = pd.to_datetime(series.index, format='%Y-%m-%d').strftime('%Y')
         series.index = pd.to_datetime(series.index)
@@ -175,7 +186,10 @@ class TimeSeriesFinanceClient(FinanceClient):
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
+                self._logger.info(f"Variación máxima semanal filtrada desde {from_date} hasta {to_date}.")
                 series = series.loc[from_date:to_date]
+        else:
+            self._logger.info("Variación máxima obtenida de todos los registros semanales.")
 
         fila = series.loc[series['high-low'] == series['high-low'].max(), :]
 

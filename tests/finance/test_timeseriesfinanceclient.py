@@ -31,7 +31,6 @@ def test_weekly_price_invalid_dates(api_key_str,
                                     mocked_requests):
     with pytest.raises(FinanceClientParamError):
         TimeSeriesFinanceClient("IBM", api_key_str).weekly_price(dt.date(2020, 10, 10), dt.date(2020, 10, 9))
-    pass
 
 
 def test_weekly_price_no_dates(api_key_str,
@@ -67,7 +66,6 @@ def test_weekly_volume_invalid_dates(api_key_str,
                                      mocked_requests):
     with pytest.raises(FinanceClientParamError):
         TimeSeriesFinanceClient("IBM", api_key_str).weekly_volume(dt.date(2020, 10, 10), dt.date(2020, 10, 9))
-    pass
 
 
 def test_weekly_volume_no_dates(api_key_str,
@@ -82,7 +80,6 @@ def test_weekly_volume_no_dates(api_key_str,
     assert ps.count() == pandas_series_IBM_volumes.count()
 
     assert_series_equal(ps, pandas_series_IBM_volumes)
-    pass
 
 
 def test_weekly_volume_dates(api_key_str,
@@ -98,14 +95,12 @@ def test_weekly_volume_dates(api_key_str,
     assert ps.count() == pandas_series_IBM_volumes_filtered.count()
 
     assert_series_equal(ps, pandas_series_IBM_volumes_filtered)
-    pass
 
 
 def test_weekly_dividend_invalid_dates(api_key_str,
                                        mocked_requests):
     with pytest.raises(FinanceClientParamError):
         TimeSeriesFinanceClient("IBM", api_key_str).yearly_dividends(dt.date(2020, 1, 1), dt.date(2019, 1, 1))
-    pass
 
 
 def test_weekly_dividend_no_dates(api_key_str,
@@ -120,7 +115,6 @@ def test_weekly_dividend_no_dates(api_key_str,
     assert ps.count() == pandas_series_IBM_dividends.count()
 
     assert_series_equal(ps, pandas_series_IBM_dividends)
-    pass
 
 
 def test_weekly_divident_dates(api_key_str,
@@ -135,14 +129,12 @@ def test_weekly_divident_dates(api_key_str,
     assert ps.count() == pandas_series_IBM_dividends_filtered.count()
 
     assert_series_equal(ps, pandas_series_IBM_dividends_filtered)
-    pass
 
 
 def test_highest_weekly_variation_invalid_dates(api_key_str,
                                                 mocked_requests):
     with pytest.raises(FinanceClientParamError):
         TimeSeriesFinanceClient("IBM", api_key_str).highest_weekly_variation(dt.date(2020, 10, 10), dt.date(2020, 10, 9))
-    pass
 
 
 def test_highest_weekly_variation_no_dates(api_key_str,
@@ -155,8 +147,6 @@ def test_highest_weekly_variation_no_dates(api_key_str,
 
     assert ps == tupla_esperada
 
-    pass
-
 
 def test_highest_weekly_variation_dates(api_key_str,
                                         mocked_requests):
@@ -168,4 +158,3 @@ def test_highest_weekly_variation_dates(api_key_str,
     tupla_esperada = (dt.date(year=2018, month=4, day=20), 162.0, 144.51, 17.49000000000001)
 
     assert ps == tupla_esperada
-    pass
