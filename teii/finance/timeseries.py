@@ -99,7 +99,25 @@ class TimeSeriesFinanceClient(FinanceClient):
     def weekly_price(self,
                      from_date: Optional[dt.date] = None,
                      to_date: Optional[dt.date] = None) -> pd.Series:
-        """ Return weekly close price from 'from_date' to 'to_date'. """
+        """ Return weekly close price from 'from_date' to 'to_date'. 
+
+        Parameters
+        ----------
+        from_date : datetime.date
+            parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
+        to_date : datetime.date
+            parámetro que indica hasta qué fecha final queremos buscar (opcional)
+        
+        Returns
+        -------
+        series : pandas.Series
+            devuelve una serie con los precios semanales entre las fechas indicadas (o todas en caso de no indicar fechas)
+
+        Raises
+        ------
+        FinanceClientParamError
+            Si la fecha from_date es posterior a to_date
+        """
 
         assert self._data_frame is not None
 
@@ -124,7 +142,25 @@ class TimeSeriesFinanceClient(FinanceClient):
     def weekly_volume(self,
                       from_date: Optional[dt.date] = None,
                       to_date: Optional[dt.date] = None) -> pd.Series:
-        """ Return weekly volume from 'from_date' to 'to_date'. """
+        """ Return weekly volume from 'from_date' to 'to_date'. 
+
+        Parameters
+        ----------
+        from_date : datetime.date
+            parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
+        to_date : datetime.date
+            parámetro que indica hasta qué fecha final queremos buscar (opcional)
+        
+        Returns
+        -------
+        series : pandas.Series
+            devuelve una serie con los volúmenes semanales entre las fechas indicadas (o todas en caso de no indicar fechas)
+
+        Raises
+        ------
+        FinanceClientParamError
+            Si la fecha from_date es posterior a to_date
+        """
 
         assert self._data_frame is not None
 
@@ -147,7 +183,25 @@ class TimeSeriesFinanceClient(FinanceClient):
     def yearly_dividends(self,
                          from_year: Optional[dt.date] = None,
                          to_year: Optional[dt.date] = None) -> pd.Series:
-        """ Return yearle dividend from 'from_date' to 'to_date'. """
+        """ Return yearly dividend from 'from_year' to 'to_year'. 
+
+        Parameters
+        ----------
+        from_year : datetime.date
+            parámetro que indica desde qué fecha (se cogerá el año) de inicio queremos buscar (opcional)
+        to_year : datetime.date
+            parámetro que indica hasta qué fecha (se cogerá el año) final queremos buscar (opcional)
+        
+        Returns
+        -------
+        series : pandas.Series
+            devuelve una serie con los dividendos anuales entre los años indicadas (o todos en caso de no indicar rango)
+
+        Raises
+        ------
+        FinanceClientParamError
+            Si la fecha from_year es posterior a to_year
+        """
 
         assert self._data_frame is not None
 
@@ -173,6 +227,26 @@ class TimeSeriesFinanceClient(FinanceClient):
     def highest_weekly_variation(self,
                                  from_date: Optional[dt.date] = None,
                                  to_date: Optional[dt.date] = None) -> pd.Series:
+        """ Return weekly highest variation from 'from_date' to 'to_date'. 
+
+        Parameters
+        ----------
+        from_date : datetime.date
+            parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
+        to_date : datetime.date
+            parámetro que indica hasta qué fecha final queremos buscar (opcional)
+        
+        Returns
+        -------
+        series : pandas.Series
+            devuelve una tupla con la información de la semana con mayor variación entre el valor high y low, entre las fechas indicadas (o todas en caso de no indicar fechas)
+
+        Raises
+        ------
+        FinanceClientParamError
+            Si la fecha from_date es posterior a to_date
+        """
+        
         assert self._data_frame is not None
 
         self._data_frame['high-low'] = self._data_frame['high'] - self._data_frame['low']

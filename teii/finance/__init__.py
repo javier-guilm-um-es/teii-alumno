@@ -11,5 +11,6 @@ __all__ = ('FinanceClientInvalidAPIKey',
            'FinanceClientAPIError',
            'FinanceClientInvalidData',
            'FinanceClientIOError',
+           'FinanceClientParamError',
            'FinanceClient',
            'TimeSeriesFinanceClient')
