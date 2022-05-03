@@ -45,7 +45,7 @@ class TimeSeriesFinanceClient(FinanceClient):
         #   Comprueba que no se produce ningún error y genera excepción
         #   'FinanceClientInvalidData' en caso de error
         try:
-             # Build Panda's data frame
+            # Build Panda's data frame
             data_frame = pd.DataFrame.from_dict(self._json_data, orient='index', dtype=float)
 
             # Rename data fields
@@ -54,7 +54,7 @@ class TimeSeriesFinanceClient(FinanceClient):
 
             # Set data field types
             data_frame = data_frame.astype(dtype={name_type[0]: name_type[1]
-                                                for key, name_type in self._data_field2name_type.items()})
+                                                  for key, name_type in self._data_field2name_type.items()})
 
             # Set index type
             data_frame.index = data_frame.index.astype("datetime64[ns]")
@@ -65,11 +65,7 @@ class TimeSeriesFinanceClient(FinanceClient):
         except Exception as e:
             raise FinanceClientInvalidData("Datos inválidos para la construcción del dataframe") from e
         else:
-            self._logger.info(f"Data frame construido")
-            
-
-
-       
+            self._logger.info("Data frame construido")
 
     def _build_base_query_url_params(self) -> str:
         """ Return base query URL parameters.
@@ -108,16 +104,16 @@ class TimeSeriesFinanceClient(FinanceClient):
         series = self._data_frame['aclose']
 
         # FIXME: type hint error
-        if from_date is not None and to_date is not None:   
-            try:    
+        if from_date is not None and to_date is not None:
+            try:
                 assert from_date <= to_date
 
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
-            # type: ignore
+
             else:
                 series = series.loc[from_date:to_date]
-            
+
         return series
 
     def weekly_volume(self,
@@ -129,39 +125,64 @@ class TimeSeriesFinanceClient(FinanceClient):
 
         series = self._data_frame['volume']
 
-        if from_date is not None and to_date is not None:   
-            try:    
+        if from_date is not None and to_date is not None:
+            try:
                 assert from_date <= to_date
 
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
-            # type: ignore
             else:
                 series = series.loc[from_date:to_date]
 
         return series
 
     def yearly_dividends(self,
-                        from_year: Optional[dt.date] = None,
-                        to_year: Optional[dt.date] = None) -> pd.Series:
+                         from_year: Optional[dt.date] = None,
+                         to_year: Optional[dt.date] = None) -> pd.Series:
         """ Return yearle dividend from 'from_date' to 'to_date'. """
 
         assert self._data_frame is not None
 
         series = self._data_frame.groupby(pd.Grouper(freq='YS'))['dividend'].sum()
 
-        if from_year is not None and to_year is not None:   
-            try:    
+        if from_year is not None and to_year is not None:
+            try:
                 assert from_year.year <= to_year.year
 
             except Exception as e:
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
-            # type: ignore
             else:
                 series = series.loc[from_year:to_year]
 
-        
-        series.index = pd.to_datetime(series.index, format = '%Y-%m-%d').strftime('%Y')
+        series.index = pd.to_datetime(series.index, format='%Y-%m-%d').strftime('%Y')
         series.index = pd.to_datetime(series.index)
 
         return series
+
+    def highest_weekly_variation(self,
+                                 from_date: Optional[dt.date] = None,
+                                 to_date: Optional[dt.date] = None) -> pd.Series:
+        assert self._data_frame is not None
+
+        self._data_frame['high-low'] = self._data_frame['high'] - self._data_frame['low']
+
+        series = self._data_frame[['high', 'low', 'high-low']]
+
+        if from_date is not None and to_date is not None:
+            try:
+                assert from_date <= to_date
+
+            except Exception as e:
+                raise FinanceClientParamError("Error en los parámetros introducidos") from e
+            else:
+                series = series.loc[from_date:to_date]
+
+        fila = series.loc[series['high-low'] == series['high-low'].max(), :]
+
+        fecha_timestamp = pd.Timestamp(fila.index[0])
+
+        fecha = dt.date(year=fecha_timestamp.year, month=fecha_timestamp.month, day=fecha_timestamp.day)
+
+        tupla = (fecha, fila.iloc[0, 0], fila.iloc[0, 1], fila.iloc[0, 2])
+
+        return tupla
