@@ -45,9 +45,10 @@ class FinanceClientIOError(FinanceClientError):
     def __init__(self, message):
         super().__init__('%s: %s' % (self.__class__.__name__, message))
 
+
 class FinanceClientParamError(FinanceClientError):
     """
-    Error con los parámetros
+    Error con los parámetros introducidos.
     """
 
     def __init__(self, message):
