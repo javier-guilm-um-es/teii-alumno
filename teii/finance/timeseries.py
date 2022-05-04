@@ -99,7 +99,7 @@ class TimeSeriesFinanceClient(FinanceClient):
     def weekly_price(self,
                      from_date: Optional[dt.date] = None,
                      to_date: Optional[dt.date] = None) -> pd.Series:
-        """ Return weekly close price from 'from_date' to 'to_date'. 
+        """ Return weekly close price from 'from_date' to 'to_date'.
 
         Parameters
         ----------
@@ -107,7 +107,7 @@ class TimeSeriesFinanceClient(FinanceClient):
             parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
         to_date : datetime.date
             parámetro que indica hasta qué fecha final queremos buscar (opcional)
-        
+
         Returns
         -------
         series : pandas.Series
@@ -133,7 +133,7 @@ class TimeSeriesFinanceClient(FinanceClient):
 
             else:
                 self._logger.info(f"Precio semanal filtrado desde {from_date} hasta {to_date}.")
-                series = series.loc[from_date:to_date]
+                series = series.loc[from_date:to_date]  # type: ignore
         else:
             self._logger.info("Precios obtenidos de todos los registros semanales.")
 
@@ -142,7 +142,7 @@ class TimeSeriesFinanceClient(FinanceClient):
     def weekly_volume(self,
                       from_date: Optional[dt.date] = None,
                       to_date: Optional[dt.date] = None) -> pd.Series:
-        """ Return weekly volume from 'from_date' to 'to_date'. 
+        """ Return weekly volume from 'from_date' to 'to_date'.
 
         Parameters
         ----------
@@ -150,7 +150,7 @@ class TimeSeriesFinanceClient(FinanceClient):
             parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
         to_date : datetime.date
             parámetro que indica hasta qué fecha final queremos buscar (opcional)
-        
+
         Returns
         -------
         series : pandas.Series
@@ -174,7 +174,7 @@ class TimeSeriesFinanceClient(FinanceClient):
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
                 self._logger.info(f"Volumen semanal filtrado desde {from_date} hasta {to_date}.")
-                series = series.loc[from_date:to_date]
+                series = series.loc[from_date:to_date]  # type: ignore
         else:
             self._logger.info("Volúmenes obtenidos de todos los registros semanales.")
 
@@ -183,7 +183,7 @@ class TimeSeriesFinanceClient(FinanceClient):
     def yearly_dividends(self,
                          from_year: Optional[dt.date] = None,
                          to_year: Optional[dt.date] = None) -> pd.Series:
-        """ Return yearly dividend from 'from_year' to 'to_year'. 
+        """ Return yearly dividend from 'from_year' to 'to_year'.
 
         Parameters
         ----------
@@ -191,7 +191,7 @@ class TimeSeriesFinanceClient(FinanceClient):
             parámetro que indica desde qué fecha (se cogerá el año) de inicio queremos buscar (opcional)
         to_year : datetime.date
             parámetro que indica hasta qué fecha (se cogerá el año) final queremos buscar (opcional)
-        
+
         Returns
         -------
         series : pandas.Series
@@ -215,7 +215,7 @@ class TimeSeriesFinanceClient(FinanceClient):
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
                 self._logger.info(f"Dividendos anuales filtrados desde {from_year} hasta {to_year}.")
-                series = series.loc[from_year:to_year]
+                series = series.loc[from_year:to_year]  # type: ignore
         else:
             self._logger.info("Dividendos obtenidos de todos los años.")
 
@@ -227,7 +227,7 @@ class TimeSeriesFinanceClient(FinanceClient):
     def highest_weekly_variation(self,
                                  from_date: Optional[dt.date] = None,
                                  to_date: Optional[dt.date] = None) -> pd.Series:
-        """ Return weekly highest variation from 'from_date' to 'to_date'. 
+        """ Return weekly highest variation from 'from_date' to 'to_date'.
 
         Parameters
         ----------
@@ -235,7 +235,7 @@ class TimeSeriesFinanceClient(FinanceClient):
             parámetro que indica desde qué fecha de inicio queremos buscar (opcional)
         to_date : datetime.date
             parámetro que indica hasta qué fecha final queremos buscar (opcional)
-        
+
         Returns
         -------
         series : pandas.Series
@@ -246,7 +246,7 @@ class TimeSeriesFinanceClient(FinanceClient):
         FinanceClientParamError
             Si la fecha from_date es posterior a to_date
         """
-        
+
         assert self._data_frame is not None
 
         self._data_frame['high-low'] = self._data_frame['high'] - self._data_frame['low']
@@ -261,7 +261,7 @@ class TimeSeriesFinanceClient(FinanceClient):
                 raise FinanceClientParamError("Error en los parámetros introducidos") from e
             else:
                 self._logger.info(f"Variación máxima semanal filtrada desde {from_date} hasta {to_date}.")
-                series = series.loc[from_date:to_date]
+                series = series.loc[from_date:to_date]  # type: ignore
         else:
             self._logger.info("Variación máxima obtenida de todos los registros semanales.")
 
